@@ -2,8 +2,10 @@ package com.cloud.order.service.Impl;
 
 import com.cloud.order.entity.InboundOrder;
 import com.cloud.order.entity.OrderDetail;
+import com.cloud.order.entity.OutboundOrder;
 import com.cloud.order.mapper.InboundOrderMapper;
 import com.cloud.order.mapper.OrderDetailMapper;
+import com.cloud.order.mapper.OutboundOrderMapper;
 import com.cloud.order.service.OrderService;
 import com.cloud.order.until.OrderUtil;
 import com.store.common.R;
@@ -19,6 +21,8 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     @Autowired
     public InboundOrderMapper inboundOrderMapper;
+    @Autowired
+    public OutboundOrderMapper outboundOrderMapper;
     @Autowired
     public OrderDetailMapper orderDetailMapper;
     @Autowired
@@ -46,6 +50,30 @@ public class OrderServiceImpl implements OrderService {
         orderDetailMapper.insert(orderDetails);
         return R.success("创建成功");
     }
+
+    @Override
+    public R<String> OutboundOrderCreate(OutboundOrder outboundOrder) {
+        OutboundOrder order = new OutboundOrder();
+        String OutboundOrderNo=orderUtil.generateOrderNo("out");
+        int totalQuantity = outboundOrder.getGoodsList().stream()
+                .mapToInt(Goods::getQuantity)  // 提取数量字段
+                .sum();
+        order.setOrderNo(OutboundOrderNo);
+        order.setWarehouseId(outboundOrder.getWarehouseId());
+        order.setWarehouseName(outboundOrder.getWarehouseName());
+        order.setCustomer(outboundOrder.getCustomer());
+        order.setStatus(0);
+        order.setRemark(outboundOrder.getRemark());
+        order.setTotalQuantity(totalQuantity);
+        order.setCreateBy(outboundOrder.getCreateBy());
+
+        outboundOrderMapper.insert(order);
+
+        List<OrderDetail> orderDetails=buildDetails(OutboundOrderNo,2,outboundOrder.getGoodsList());
+        orderDetailMapper.insert(orderDetails);
+        return R.success("创建成功");
+    }
+
     /**
      *
      */

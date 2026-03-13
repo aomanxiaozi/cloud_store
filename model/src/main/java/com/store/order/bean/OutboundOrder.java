@@ -2,8 +2,10 @@ package com.store.order.bean;
 
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.store.goods.bean.Goods;
 import lombok.Data;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @TableName("outbound_order")
@@ -59,7 +61,11 @@ public class OutboundOrder {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
+    @TableField(exist = false)
+    private List<Goods> goodsList;
 
+    @TableField(exist = false)
+    private String warehouseName;
     public String getStatusDesc() {
         return switch (status) {
             case 0 -> "待出库";

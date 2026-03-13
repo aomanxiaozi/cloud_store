@@ -1,6 +1,7 @@
 package com.cloud.order.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.store.goods.bean.Goods;
 import lombok.Data;
 import java.util.Date;
 import java.util.List;
@@ -62,6 +63,12 @@ public class OutboundOrder {
     // 非数据库字段 - 用于关联查询
     @TableField(exist = false)
     private List<OrderDetail> details;
+
+    @TableField(exist = false)
+    private List<Goods> goodsList;
+
+    @TableField(exist = false)
+    private String warehouseName;
 
     public String getStatusDesc() {
         return switch (status) {
