@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    include: route
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+server:
+  port: 80
+
+jwt:
+  secret: 6Nq7Xp9kL2mR4vB8wC1eF5hJ3yU7iA0cD9gH4jK6nM2
